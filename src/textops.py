@@ -5,24 +5,40 @@ Implement without mutating inputs.
 """
 from typing import List
 
-
 def unique_words_preserve_order(words: List[str]) -> List[str]:
-    """Return first occurrences only (case-sensitive)."""
-    raise NotImplementedError
+    result = []
+    seen = []
+    for w in words:
+        if w not in seen:
+            seen.append(w)
+            result.append(w)
+    return result
 
 
 def top_k_frequent_first_tie(words: List[str], k: int) -> List[str]:
-    """Return up to k words ordered by frequency (high to low).
+    if k <= 0:
+        raise ValueError("k must be positive")
 
-    For ties, earlier first-appearance wins.
-    If k <= 0, raise ValueError.
-    """
-    raise NotImplementedError
+    freq = {}
+    order = []
+    for w in words:
+        if w not in freq:
+            freq[w] = 1
+            order.append(w)  # remember first appearance
+        else:
+            freq[w] += 1
+
+    # sort based on frequency first, then order of appearance
+    sorted_words = sorted(order, key=lambda x: (-freq[x], order.index(x)))
+
+    return sorted_words[:k]
 
 
 def redact_words(words: List[str], banned: List[str]) -> List[str]:
-    """Return a new list where every word in `banned` is replaced by "***".
-
-    Exact matches only; case-sensitive.
-    """
-    raise NotImplementedError
+    result = []
+    for w in words:
+        if w in banned:
+            result.append("***")
+        else:
+            result.append(w)
+    return result
